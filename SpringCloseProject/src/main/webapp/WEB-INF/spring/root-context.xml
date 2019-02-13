@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		
+		<!-- HikariConfig 
+		여러명의 사용자를 동시에 처리해야하는 웹 어플리케이션의 경우 
+		데이터베이스 연결을 이용할때는 커넥션 풀 을 이용하므로 
+		java 에서는 DataSource 라는 인터페이스 통해 커넥션 풀사용 
+		
+		spring-jdbc 라이브러리도 있지만 
+		최근유행하는 hikari 를 써보자 
+		히카리는 부트에서도 사용될만큼 빠르게 퍼지고 있다 
+		
+		
+		
+		-->
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+		<property name="driverClassName"
+			value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl"
+			value="jdbc:mysql://mysql.c8oj5ezixhrb.ap-northeast-2.rds.amazonaws.com/openproject?characterEncoding=utf8" />
+		<property name="username" value="bit" />
+		<property name="password" value="bit" />
+	</bean>
+		
+			<!-- HikariCP configuration -->
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
+		destroy-method="close">
+		<constructor-arg ref="hikariConfig" />
+	</bean>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+</beans>

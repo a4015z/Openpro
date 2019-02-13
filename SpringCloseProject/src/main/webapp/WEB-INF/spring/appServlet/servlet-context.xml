@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+		<beans:property name="order" value="2" /> 
+			<!-- order 2번쨰로 잡아서 먼저처리 1번으로하면 
+			다운로드 하려하기 전에 jsp 로 찍어버려서 못한다 ~ 
+			 -->
+	</beans:bean>
+	
+	
+	<!-- 
+	context:commponet-scan base-package에서 autowired할 패키지경로를 기재하면 된다.
+	 여러개의 패키지로 구분할수도 있고(콤모로 구분), 상위 패키지를 한번에 등록할 수도 있다.
+	 ex) <context:component-scan base-package="com.yk.yboard, com.yk.common" />
+	  autowired할 클래스에 @component로 표시
+	 @Component
+	public class YboardDAOImpl implements YboardDAO {
+    ....
+		}
+	 
+	  -->
+	
+	
+	<!-- 기본 componet  -->
+	<context:component-scan base-package="com.bit.close" />
+	
+	<!-- 업로드 위치  -->
+	<resources location="/upload" mapping="/upload"></resources>
+	
+	
+	<!-- 사진 업로드  -->
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver" />
+	
+	<!-- 커스텀 뷰 처리를 위한 Resolver 등록 -->
+	<beans:bean class="org.springframework.web.servlet.view.BeanNameViewResolver"
+		p:order="1" />
+	
+	<!-- 메일 Autowired할 패키지경로  -->
+<!-- 	<context:component-scan base-package="com.bit.close.그다음 지정할 패키지를 적자 " /> -->
+	
+	<!--  메일보내기 send  -->
+	<beans:bean id="mailSender"
+  class="org.springframework.mail.javamail.JavaMailSenderImpl">
+  <beans:property name="host" value="smtp.gmail.com" />
+  <beans:property name="port" value="587" /><!-- 465 or 25-->
+  <beans:property name="username" value="kjh4015@gmail.com" /><!-- 실제 메일을 보낼수있께 실존하는 E-mail -->
+  <beans:property name="password" value="4261530a" /><!-- 실제 비번  -->
+  <beans:property name="defaultEncoding" value="utf-8" /><!-- 기본 인코딩을 -> utf-8로  -->
+  <beans:property name="javaMailProperties">
+  <!-- eamil 요청시는 smtp  -->
+   <beans:props>
+    <beans:prop key="mail.transport.protocol">smtp</beans:prop>
+    <beans:prop key="mail.smtp.auth">true</beans:prop>
+    <beans:prop key="mail.smtp.starttls.enable">true</beans:prop>
+    <beans:prop key="mail.debug">true</beans:prop>
+   </beans:props>
+  </beans:property>
+ </beans:bean>
+	
+	
+		<!-- 인터셉터 -->
+ 	<!-- <interceptors>
+		<interceptor>
+			<mapping path="/com.bit.close.다음에 오는 패키지명 실제도 interceptor 할 패키지 명만 적으면 된다 /**"/>
+			<mapping path="//**"/>
+			<beans:bean class="com.bit.close.인터셉터할 패키지 명과 클래스를 적으세용 "/>
+		</interceptor>
+	</interceptors> -->
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</beans:beans>
